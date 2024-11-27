@@ -20,7 +20,8 @@ def create_backup():
     if not src_dir or not dest_dir:
         messagebox.showwarning("Warning", "Both directories must be selected.")
         return
-    
+
+    # --- The lines following this (which are commented) are for periodic (weekly) check for changes in the directory provided by the user. My be optionally provided as a future feature. ---
     # Using command prompt(cmd) to execute a powershell command, this powershell command will search the cwd for files/
     # folders which have been created since previous run
     # files = (os.popen(rf'powershell "Get-ChildItem \"{x}\" -Recurse | Where-Object {{ $_.CreationTime -ge \"{Adate}\" -or $_.LastWriteTime -ge \"{Adate}\" }} | % {{ $_.FullName }}"')).read()
@@ -52,7 +53,7 @@ def create_backup():
     with open(archive_path, 'rb') as f:
         data = f.read()
     
-    key = b'rajamantrichorsi'
+    key = b'ADD_YOU_16_CHARACTER_KEY_HERE' # The key used for the encryption (save it)
     iv = os.urandom(16)
 
     padder = padding.PKCS7(128).padder()
@@ -66,13 +67,14 @@ def create_backup():
     enc_path = f"{archive_path[:-4]}.enc"
     with open(enc_path, 'wb') as enc_file:
         enc_file.write(encrypted_data + iv)
-    
+
+    # --- The lines following this are for OAuth using settings.yaml which allowed cloud storage capabilities. For future feature addon.
     # Uploading to Google Drive
     # gauth = GoogleAuth("settings.yaml")
     # gauth.LocalWebserverAuth()
     # drive = GoogleDrive(gauth)
     
-    # drive_file = drive.CreateFile({"title": f"{today_date}.enc", "parents": [{"kind": "drive#fileLink", "id": "1ViSkVSr92IfxJVC5O2OsUmsxO33eSTeg"}]})
+    # drive_file = drive.CreateFile({"title": f"{today_date}.enc", "parents": [{"kind": "drive#fileLink", "id": "file_link"}]})
     # drive_file.SetContentFile(enc_path)
     # drive_file.Upload()
     
